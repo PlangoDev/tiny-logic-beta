@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#1c1b2a">
+<title>Tiny Logic beta</title>
+<meta name="description" content="Private beta downloads for Tiny Logic, a pixel-art circuit game by Mazell Smack-Dubose.">
+<link rel="icon" type="image/png" href="art/favicon.png">
+<link rel="preload" href="fonts/tinylogic-5x7.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="art/mazell.png" as="image">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+
+<!-- ============================================================ boot: the CRT powers on (first visit only) -->
+<div id="boot" class="boot" hidden>
+  <div class="boot-glass">
+    <p class="boot-brand px" aria-hidden="true">TINY LOGIC</p>
+    <button id="power" class="power" type="button">
+      <span class="power-ring" aria-hidden="true"><span class="power-glyph"></span></span>
+      <span class="power-label px">PRESS START</span>
+    </button>
+    <p class="boot-hint">Click, tap or press any key. Sound comes on with it (there's a mute button).</p>
+  </div>
+</div>
+<div id="crt" class="crt" aria-hidden="true"><div class="crt-line"></div></div>
+
+<!-- ============================================================ top bar -->
+<header class="topbar">
+  <a class="brand" href="#" aria-label="Tiny Logic beta, back to the top">
+    <img src="art/icon_chip.png" width="32" height="32" alt="">
+    <span class="px">TINY LOGIC</span>
+    <span class="tag tag-beta px" id="build-tag">BETA</span>
+  </a>
+  <button id="mute" class="icon-btn" type="button" aria-pressed="false" aria-label="Sound is on. Turn sound off">
+    <img class="on" src="art/icon_sound_on.png" width="32" height="32" alt="">
+    <img class="off" src="art/icon_sound_off.png" width="32" height="32" alt="">
+    <span class="px icon-btn-label">SOUND</span>
+  </button>
+</header>
+
+<main id="app" class="app">
+
+  <!-- ============================================================ connecting -->
+  <section id="screen-loading" class="screen screen-loading" aria-live="polite">
+    <div class="loader">
+      <div class="loader-bus" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <p class="px">CONNECTING<span class="dots" aria-hidden="true"></span></p>
+    </div>
+  </section>
+
+  <!-- ============================================================ the downloads -->
+  <section id="screen-main" class="screen" hidden>
+    <div class="hero">
+      <h1 class="logo" aria-label="Tiny Logic">
+        <span class="l" aria-hidden="true">T</span><span class="l" aria-hidden="true">I</span><span class="l" aria-hidden="true">N</span><span class="l" aria-hidden="true">Y</span><span class="sp" aria-hidden="true"> </span><span class="l" aria-hidden="true">L</span><span class="l" aria-hidden="true">O</span><span class="l" aria-hidden="true">G</span><span class="l" aria-hidden="true">I</span><span class="l" aria-hidden="true">C</span>
+      </h1>
+      <p class="tagline px">BUILD A COMPUTER FROM REAL TRANSISTORS</p>
+      <p class="byline">A game by <strong>Mazell Smack-Dubose</strong> <span class="pill px" id="hero-build">PRIVATE BETA</span></p>
+    </div>
+
+    <div class="talk" id="talk-main">
+      <div class="face-wrap"><div class="face" role="img" aria-label="Mazell, the game's maker"></div></div>
+      <div class="bubble" tabindex="0" aria-describedby="talk-main-full">
+        <div class="bubble-head">
+          <span class="nameplate px">MAZELL</span>
+          <span class="pips" aria-hidden="true"></span>
+        </div>
+        <p class="say px" aria-hidden="true"></p>
+        <button class="next px" type="button" aria-label="Next line">NEXT ▶</button>
+      </div>
+      <p class="sr-only" id="talk-main-full"></p>
+    </div>
+
+    <section class="promise panel" id="promise" aria-labelledby="promise-title">
+      <div class="promise-text">
+        <h2 class="h px" id="promise-title"><img src="art/icon_lock.png" width="32" height="32" alt="">THE PROMISE</h2>
+        <p class="vow">“I won't share my link or this build.”</p>
+        <p class="plain">Every copy is stamped with who downloaded it. If one ever turns up somewhere it shouldn't,
+          Mazell will know whose it was. No pressure: just keep it between you and Mazell.</p>
+        <p class="promise-cta px" aria-hidden="true"><span class="blink">▶</span> <span class="cta-off">FLIP THE SWITCH TO PROMISE</span><span class="cta-on">PROMISED! THE DOWNLOADS ARE ON</span></p>
+      </div>
+      <div class="board-fit">
+        <div class="board" id="promise-board">
+          <div class="wires"></div>
+          <img class="part battery" src="art/battery.png" alt="">
+          <img class="part resistor off" src="art/resistor_off.png" alt="">
+          <img class="part resistor on" src="art/resistor_on.png" alt="">
+          <div class="part led-wrap"><span class="glow"></span><img class="off" src="art/led_green_off.png" alt=""><img class="on" src="art/led_green_on.png" alt=""></div>
+          <button class="part knife" id="knife" type="button" role="switch" aria-checked="false"
+                  aria-label="Promise switch: I won't share my link or this build"><span class="knife-art"></span></button>
+          <span class="flip-me px" aria-hidden="true">FLIP ME!</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="downloads" aria-labelledby="dl-title">
+      <div class="feed" aria-hidden="true"><i class="feed-down"></i><i class="feed-across"></i></div>
+      <h2 class="h px sr-only" id="dl-title">DOWNLOADS</h2>
+      <div class="cards" id="cards"></div>
+      <p class="locked-note" id="locked-note"><img src="art/icon_lock.png" width="16" height="16" alt="">The downloads wake up once you flip the switch above.</p>
+      <div class="install panel" id="install" hidden tabindex="-1" aria-live="polite"></div>
+    </section>
+
+    <section class="know panel" aria-labelledby="know-title">
+      <h2 class="h px" id="know-title"><img src="art/icon_shield.png" width="32" height="32" alt="">GOOD TO KNOW</h2>
+      <ul class="know-list">
+        <li><img src="art/icon_lock.png" width="32" height="32" alt=""><p><strong>Your link is yours.</strong> It gets one download for each kind of computer in this build.</p></li>
+        <li><img src="art/icon_copy.png" width="32" height="32" alt=""><p><strong>Two kinds of computer?</strong> Download the second one from the same network (the same home Wi-Fi, say) as the first.</p></li>
+        <li><img src="art/icon_heart.png" width="32" height="32" alt=""><p><strong>Every copy is stamped</strong> with who downloaded it and its own copy ID, so a leaked copy can be traced. Keep it to yourself and everyone stays friends.</p></li>
+      </ul>
+    </section>
+
+    <section class="peek" aria-labelledby="peek-title">
+      <h2 class="h px" id="peek-title"><img src="art/icon_term.png" width="32" height="32" alt="">WHAT'S INSIDE</h2>
+      <div class="shots">
+        <figure class="shot"><img src="art/shot_transistors.webp" width="960" height="540" loading="lazy" alt="Inside a NAND chip: a battery, resistors, two transistors and a glowing red light, all wired up on the game board."><figcaption><span class="px">REAL ELECTRICITY</span>Batteries, resistors, transistors. Lights burn out if you forget the resistor.</figcaption></figure>
+        <figure class="shot"><img src="art/shot_cpu.webp" width="960" height="540" loading="lazy" alt="A computer built from chips the player made, with buses carrying numbers between them."><figcaption><span class="px">CHIPS ALL THE WAY UP</span>Fold what you build into a chip, then build bigger things out of those.</figcaption></figure>
+        <figure class="shot"><img src="art/shot_screen.webp" width="960" height="540" loading="lazy" alt="A pixel screen part showing a picture drawn by a circuit."><figcaption><span class="px">SCREENS + SOUND</span>Pixel screens, keyboards and speakers for your computers to play with.</figcaption></figure>
+        <figure class="shot"><img src="art/shot_studio.webp" width="960" height="540" loading="lazy" alt="The chip studio, where a chip's pins, colours and painted face are designed."><figcaption><span class="px">MAKE IT YOURS</span>Paint your chips, place their pins, give them a little window.</figcaption></figure>
+      </div>
+    </section>
+  </section>
+
+  <!-- ============================================================ invite only (no link / a broken link) -->
+  <section id="screen-invite" class="screen screen-solo" hidden>
+    <div class="solo-logo px" aria-hidden="true">TINY LOGIC</div>
+    <div class="talk talk-solo" id="talk-invite">
+      <div class="face-wrap"><div class="face" role="img" aria-label="Mazell"></div></div>
+      <div class="bubble" tabindex="0">
+        <div class="bubble-head"><span class="nameplate px">MAZELL</span><span class="pips" aria-hidden="true"></span></div>
+        <p class="say px" aria-hidden="true"></p>
+        <button class="next px" type="button" aria-label="Next line">NEXT ▶</button>
+      </div>
+      <p class="sr-only full"></p>
+    </div>
+    <div class="panel solo-panel">
+      <h1 class="h px solo-title"><img src="art/icon_lock.png" width="32" height="32" alt=""><span id="invite-title">INVITE ONLY</span></h1>
+      <p class="plain" id="invite-body">This beta is invite-only: ask Mazell for your personal link.</p>
+      <div class="toy">
+        <div class="board-fit"><div class="board toy-board" id="toy-and"></div></div>
+        <p class="toy-caption" id="toy-and-caption" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ closed -->
+  <section id="screen-closed" class="screen screen-solo" hidden>
+    <div class="solo-logo px" aria-hidden="true">TINY LOGIC</div>
+    <div class="sleeper">
+      <button class="sleeper-btn" id="sleeper" type="button" aria-label="Mazell is asleep. Give Mazell a poke">
+        <span class="face face-big" aria-hidden="true"></span>
+        <span class="zzz px" aria-hidden="true"><i>Z</i><i>Z</i><i>Z</i></span>
+      </button>
+      <p class="sleeper-say px" id="sleeper-say" aria-live="polite"></p>
+    </div>
+    <div class="panel solo-panel">
+      <h1 class="h px solo-title"><img src="art/icon_warn.png" width="32" height="32" alt="">BETA DOWNLOADS ARE CLOSED</h1>
+      <p class="plain">This round of the beta is over, so there's nothing to download right now. Thank you to everyone who
+        played, broke things and said so. Keep an eye out: the next round, and the full game, are on the way.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ on a phone -->
+  <section id="screen-mobile" class="screen screen-solo" hidden>
+    <div class="solo-logo px" aria-hidden="true">TINY LOGIC</div>
+    <div class="talk talk-solo" id="talk-mobile">
+      <div class="face-wrap"><div class="face" role="img" aria-label="Mazell"></div></div>
+      <div class="bubble" tabindex="0">
+        <div class="bubble-head"><span class="nameplate px">MAZELL</span><span class="pips" aria-hidden="true"></span></div>
+        <p class="say px" aria-hidden="true"></p>
+        <button class="next px" type="button" aria-label="Next line">NEXT ▶</button>
+      </div>
+      <p class="sr-only full"></p>
+    </div>
+    <div class="panel solo-panel">
+      <h1 class="h px solo-title"><img src="art/icon_mac.png" width="32" height="32" alt="">GRAB IT ON YOUR COMPUTER</h1>
+      <p class="plain">Tiny Logic runs on computers: <strong>Mac, Windows and Linux</strong>. Open this same link on your
+        computer and your download will be waiting there.</p>
+      <div class="mobile-actions">
+        <button class="btn btn-go" id="copy-link" type="button"><img src="art/icon_copy.png" width="32" height="32" alt=""><span class="px">COPY MY LINK</span></button>
+        <a class="btn btn-alt" id="mail-link" href="#"><img src="art/icon_mail.png" width="32" height="32" alt=""><span class="px">EMAIL IT TO ME</span></a>
+      </div>
+      <p class="copied px" id="copied" aria-live="polite"></p>
+    </div>
+    <div class="panel solo-panel">
+      <h2 class="h px"><img src="art/icon_heart.png" width="32" height="32" alt="">WHILE YOU'RE HERE</h2>
+      <p class="plain">Poke the inputs of this NAND gate. Every computer, even the one in your hand, is built from gates like it.</p>
+      <div class="toy">
+        <div class="board-fit"><div class="board toy-board" id="toy-nand"></div></div>
+        <p class="toy-caption" id="toy-nand-caption" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ can't reach the server -->
+  <section id="screen-error" class="screen screen-solo" hidden>
+    <div class="solo-logo px" aria-hidden="true">TINY LOGIC</div>
+    <div class="unplugged" aria-hidden="true">
+      <span class="cable cable-l"><img src="art/icon_plug.png" alt=""></span>
+      <span class="spark-gap"><i></i><i></i><i></i></span>
+      <span class="cable cable-r"><span class="socket"></span></span>
+    </div>
+    <div class="panel solo-panel">
+      <h1 class="h px solo-title"><img src="art/icon_warn.png" width="32" height="32" alt="">CAN'T REACH THE SERVER</h1>
+      <p class="plain" id="error-body">The download server didn't answer. Check your internet connection and try again.</p>
+      <button class="btn btn-go" id="retry" type="button"><img src="art/icon_retry.png" width="32" height="32" alt=""><span class="px">TRY AGAIN</span></button>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-rule" aria-hidden="true"><i></i><i></i><i></i></div>
+  <p class="px">TINY LOGIC · A GAME BY MAZELL SMACK-DUBOSE</p>
+  <p class="foot-plain">Private beta. This page and your copy are just for you. © 2026 Mazell Smack-Dubose.</p>
+</footer>
+
+<canvas id="fx" aria-hidden="true"></canvas>
+<div id="flash" class="flash" aria-hidden="true"></div>
+
+<template id="card-tpl">
+  <article class="card" data-state="locked">
+    <span class="card-tag px" hidden>YOUR COMPUTER ↓</span>
+    <header class="card-head">
+      <img class="card-icon" width="48" height="48" alt="">
+      <h3 class="card-name px"></h3>
+      <span class="card-led" aria-hidden="true"></span>
+    </header>
+    <div class="card-body">
+      <div class="chips"></div>
+      <p class="card-line"></p>
+      <div class="card-act">
+        <button class="btn btn-go dl" type="button"><img src="art/icon_down.png" width="32" height="32" alt=""><span class="px dl-label">DOWNLOAD</span></button>
+        <div class="locked px"><img src="art/icon_lock.png" width="32" height="32" alt="">LOCKED</div>
+        <div class="progress">
+          <div class="phase px"><span class="phase-name"></span><span class="phase-num"></span></div>
+          <div class="pbus"><div class="pfill"><span class="pbits px"></span></div></div>
+          <ol class="pleds px">
+            <li data-p="claim">CLAIM</li><li data-p="fetch">FETCH</li><li data-p="decrypt">UNLOCK</li><li data-p="stamp">STAMP</li><li data-p="save">SAVE</li>
+          </ol>
+        </div>
+        <div class="card-msg"></div>
+      </div>
+    </div>
+  </article>
+</template>
+
+<noscript><div class="noscript">This page needs JavaScript to make your personal copy of the game.</div></noscript>
+
+<script>
+  // Load the real gatekeeper (beta.js) or, with ?mock in the address, the stand-in that fakes every state.
+  // Scripts added this way run in the order added, so window.Beta exists before the page's own scripts start.
+  (function () {
+    var mock = /[?&]mock(=|&|$)/.test(location.search);
+    ['' + (mock ? 'beta-mock.js' : 'beta.js'), 'js/sfx.js', 'js/fx.js', 'js/app.js'].forEach(function (src) {
+      var s = document.createElement('script');
+      s.src = src;
+      s.async = false;
+      document.body.appendChild(s);
+    });
+  })();
+</script>
+</body>
+</html>
